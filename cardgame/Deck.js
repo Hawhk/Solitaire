@@ -51,16 +51,13 @@ class Deck {
 
     show = () => {
         let xFlipped = this.cardX * 3;
-        let w = this.cardWidth + 15;
-        let h = this.cardHeight + 15;
         let cardsLen = this.cards.length;
         let flippedLen = this.flipped.length;
-        noStroke();
-        fill(...this.padColor , 220);
-        rect(this.cardX ,this.cardY, w, h);
-        rect(xFlipped, this.cardY, w, h);
+
+        drawPad(this.cardX ,this.cardY);
+        drawPad(xFlipped, this.cardY);
         this.cols.forEach(col => {
-            col.show();
+            drawPad(col.x, col.y);
         })
         if(cardsLen > 0) {
             this.cards[cardsLen - 1].show(this.cardX, this.cardY, false, true);
@@ -68,6 +65,10 @@ class Deck {
         if(flippedLen > 0) {
             this.flipped[flippedLen - 1].show(xFlipped, this.cardY, true, true);
         }
+        this.cols.forEach(col => {
+            col.show();
+        })
+        
     }
 
     clicked = () => {

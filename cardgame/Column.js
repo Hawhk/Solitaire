@@ -9,17 +9,11 @@ class Column {
         this.cardWidth = WIDTH;
         this.cardHeight = HEIGHT;
         this.spacing = 30;
-        this.padColor = [34,54,60];
         this.draging = -1;
         this.pressingCheck = false;
     }
 
     show = () => {
-        let w = this.cardWidth + 15;
-        let h = this.cardHeight + 15;
-        noStroke();
-        fill(...this.padColor , 220);
-        rect(this.x ,this.y, w, h);
         for (let index = 0; index < this.cards.length; index++) {
             let card = this.cards[index];
             let show = index > this.showed; //TODO: remove -6; 
@@ -55,7 +49,7 @@ class Column {
                 pressed = insideRect(this.x, y, mx, my, this.cardWidth/2, this.spacing/2);
             }
             if (pressed) {
-                if (i > this.showed - 3) {
+                if (i > this.showed) {
                     this.draging = i;
                     this.pressingCheck = true;
                 }
