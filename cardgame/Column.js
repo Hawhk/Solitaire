@@ -10,7 +10,6 @@ class Column {
         this.cardHeight = HEIGHT;
         this.spacing = 30;
         this.draging = -1;
-        this.pressingCheck = false;
     }
 
     show = () => {
@@ -18,7 +17,10 @@ class Column {
             let card = this.cards[index];
             let show = index > this.showed; //TODO: remove -6; 
             let y = this.y + this.spacing * index;
-            if (this.pressingCheck && this.drawPressedCardStack(index)) {
+            if (
+                this.draging != -1 &&
+                index >= this.draging
+                ) {
                 break;
             } else {
                 if (index == this.cards.length - 1) {
@@ -51,7 +53,6 @@ class Column {
             if (pressed) {
                 if (i > this.showed) {
                     this.draging = i;
-                    this.pressingCheck = true;
                 }
                 return pressed;
             }
@@ -59,37 +60,34 @@ class Column {
         return false;
     }
 
-    drawPressedCardStack = (i) => {
-        if (this.draging != -1 && i >= this.draging) {
-            if (mouseIsPressed) {
-                for (let j = this.draging; j < this.cards.length; j++) {
-                    this.cards[j].show(mouseX, mouseY + this.spacing * (j - i), true, true);
-                }
-                return true;
-            } else {
-                for (let j = 0; j < this.deck.cols.length; j++) {
-                    if (j === this.number) {
-                        continue;
-                    }
-                    const col = this.deck.cols[j];
-                    let index = col.cards.length -1;
-                    if (index < 0) {
-                        index = 0;
-                    }
-                    let y = col.y + this.spacing * index;
-                    if(insideRect(col.x, y, mouseX, mouseY, this.cardWidth/2, this.cardHeight/2)) {
-                        let spl = this.cards.splice(this.draging, this.cards.length);
-                        let con = col.cards.concat(spl);
-                        col.cards = con;
-                        this.showNewCard()
-                        return true;
-                    }
-                }
-                this.pressingCheck = false;
-                this.draging = -1;
+    drawPressedCardStack = () => {
+        if (this.draging == -1) {
+            return;
+        } 
+        if (mouseIsPressed) {
+            for (let j = this.draging; j < this.cards.length; j++) {
+                let y = (mouseY + this.spacing * (j - this.draging)) + this.cardWidth/2 + this.spacing/2 + 3;
+                this.cards[j].show(mouseX, y, true, true);
             }
+        } else {
+            for (let j = 0; j < this.deck.cols.length; j++) {
+                if (j === this.number) {
+                    continue;
+                }
+                const col = this.deck.cols[j];
+                let index = col.cards.length -1;
+                if (index < 0) {
+                    index = 0;
+                }
+                let y = col.y + this.spacing * index;
+                if(insideRect(col.x, y, mouseX, mouseY, this.cardWidth/2, this.cardHeight/2)) {
+                    let spl = this.cards.splice(this.draging, this.cards.length);
+                    let con = col.cards.concat(spl);
+                    col.cards = con;
+                    this.showNewCard()
+                }
+            }
+            this.draging = -1;
         }
-
-        return false;
     }
 }

@@ -59,7 +59,7 @@ class Card {
         rectMode(CENTER);
         stroke(0);
         textAlign(CENTER, CENTER);
-        textSize(20);
+        
 
         let addOnHover = 0;
         if (hoverEffect && hovers) {
@@ -74,8 +74,13 @@ class Card {
             fill(backColorAddon);
         }
         rect(x, y, this.width, this.height);
+        
+        
         if (showFace) {
             fill(this.color);
+            textSize(35);
+            text(this.suit, x, y);
+            textSize(20);
             text(this.display, x-35, y-60);
             text(this.suit, x-35, y-45);
             push();

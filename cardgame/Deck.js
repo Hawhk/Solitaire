@@ -5,6 +5,7 @@ class Deck {
         this.spacing = 20;
         this.cardX = this.cardWidth/2 + this.spacing;
         this.cardY = this.cardHeight/2 + this.spacing;
+        this.flipped = [];
 
         if (!!cards && isArray(cards)) {
             this.cards = cards;
@@ -15,8 +16,11 @@ class Deck {
         for (let i = 0; i < 7; i++) {
             this.cols.push(new Column(this.cardX * 2 * (i + 1), this.cardY * 3, i, this));
         }
-        this.flipped = [];
-        this.padColor = [34,54,60];
+        this.sorted = [];
+        for (let i = 0; i < 4; i++) {
+            this.sorted.push(new Sort(this.cardX * 2 * (i + 4), this.cardY, i, this));
+        }
+        
     }
 
     scramble = () => {
@@ -34,20 +38,22 @@ class Deck {
                 this.cols[j - 1].cards.push(this.cards.pop());
             }
         }
-        
     }
+    
+    showAll = () => {
+        console.log(x,y)
+        this.cards.forEach(card => {
+            if (x + this.cards[0].width/2 > width) {
+                x = this.cards[0].width/2 + spacing;
+                y += spacing * 5;
+            }
 
-        // console.log(x,y)
-        // this.cards.forEach(card => {
-        //     if (x + this.cards[0].width/2 > width) {
-        //         x = this.cards[0].width/2 + spacing;
-        //         y += spacing * 5;
-        //     }
+            card.show(x, y)
 
-        //     card.show(x, y)
-
-        //     x += this.cards[0].width + spacing;
-        // });
+            x += this.cards[0].width + spacing;
+        });
+    }
+        
 
     show = () => {
         let xFlipped = this.cardX * 3;
@@ -59,16 +65,24 @@ class Deck {
         this.cols.forEach(col => {
             drawPad(col.x, col.y);
         })
+        this.sorted.forEach(sort => {
+            drawPad(sort.x, sort.y);
+        })
         if(cardsLen > 0) {
             this.cards[cardsLen - 1].show(this.cardX, this.cardY, false, true);
         }
         if(flippedLen > 0) {
             this.flipped[flippedLen - 1].show(xFlipped, this.cardY, true, true);
         }
+        this.sorted.forEach(sort => {
+            sort.show();
+        });
         this.cols.forEach(col => {
             col.show();
         })
-        
+        this.cols.forEach(col => {
+            col.drawPressedCardStack();
+        })
     }
 
     clicked = () => {
