@@ -33,12 +33,6 @@ class Column {
         };
     }
 
-    showNewCard = () => {
-        if (this.showed >= 0 && this.showed == this.cards.length - 1) {
-            this.showed--;
-        }
-    }
-
     pressedCard = (mx, my) => {
         for (let i = 0; i < this.cards.length; i++) {
             // const card = this.cards[i];
@@ -79,12 +73,12 @@ class Column {
                 if (index < 0) {
                     index = 0;
                 }
-                let y = col.y + this.spacing * index;
+                let y = col.y + col.spacing * index;
                 if(insideRect(col.x, y, mouseX, mouseY, this.cardWidth/2, this.cardHeight/2)) {
-                    let spl = this.cards.splice(this.draging, this.cards.length);
-                    let con = col.cards.concat(spl);
-                    col.cards = con;
-                    this.showNewCard()
+                    col.cards = moveCards(this.cards, col.cards, this.draging, this.cards.length);
+                    if (this.showed >= 0 && this.showed == this.cards.length - 1) {
+                        this.showed--;
+                    }
                 }
             }
             this.draging = -1;

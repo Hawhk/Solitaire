@@ -5,7 +5,8 @@ class Deck {
         this.spacing = 20;
         this.cardX = this.cardWidth/2 + this.spacing;
         this.cardY = this.cardHeight/2 + this.spacing;
-        this.flipped = [];
+        
+        this.flippDeck = new FlippDeck(this.cardX, this.cardX * 3, this.cardY, this);
 
         if (!!cards && isArray(cards)) {
             this.cards = cards;
@@ -20,14 +21,12 @@ class Deck {
         for (let i = 0; i < 4; i++) {
             this.sorted.push(new Sort(this.cardX * 2 * (i + 4), this.cardY, i, this));
         }
-        
     }
 
     scramble = () => {
         for (let i = 0; i < 20000; i++) {
             let index1 = round(random(this.cards.length - 1));
             let index2 = round(random(this.cards.length - 1));
-            // console.log(index1)
             [this.cards[index1],  this.cards[index2]] = [this.cards[index2],  this.cards[index1]];
         }
     }
@@ -38,10 +37,11 @@ class Deck {
                 this.cols[j - 1].cards.push(this.cards.pop());
             }
         }
+        this.flippDeck.deck = this.cards.splice(0, this.cards.length);
     }
     
     showAll = () => {
-        console.log(x,y)
+        // console.log(x,y)
         this.cards.forEach(card => {
             if (x + this.cards[0].width/2 > width) {
                 x = this.cards[0].width/2 + spacing;
@@ -56,50 +56,25 @@ class Deck {
         
 
     show = () => {
-        let xFlipped = this.cardX * 3;
-        let cardsLen = this.cards.length;
-        let flippedLen = this.flipped.length;
-
-        drawPad(this.cardX ,this.cardY);
-        drawPad(xFlipped, this.cardY);
+        drawPad(this.flippDeck.deckX, this.flippDeck.y);
+        drawPad(this.flippDeck.flippX, this.flippDeck.y);
         this.cols.forEach(col => {
             drawPad(col.x, col.y);
-        })
+        });
         this.sorted.forEach(sort => {
             drawPad(sort.x, sort.y);
-        })
-        if(cardsLen > 0) {
-            this.cards[cardsLen - 1].show(this.cardX, this.cardY, false, true);
-        }
-        if(flippedLen > 0) {
-            this.flipped[flippedLen - 1].show(xFlipped, this.cardY, true, true);
-        }
+        });
+        this.flippDeck.show();
         this.sorted.forEach(sort => {
             sort.show();
         });
         this.cols.forEach(col => {
             col.show();
-        })
+        });
         this.cols.forEach(col => {
             col.drawPressedCardStack();
-        })
-    }
-
-    clicked = () => {
-        let isClicked = false;
-        if (this.cards.length > 0) {
-            let lastCard = this.cards[this.cards.length - 1];
-            isClicked = (lastCard.getHoverState(this.cardX, this.cardY) || lastCard.getHoverState(this.cardX * 3, this.cardY));
-            // console.log(isPressed, x, y);
-        } else if (this.flipped.length > 0) {
-            this.cards = this.flipped.reverse();
-            this.flipped = [];
-            isClicked = true;
-        
-        }
-        if (isClicked) {
-            this.flipped.push(this.cards.pop());
-        }
+        });
+        this.flippDeck.drawPressedCard();
     }
 
     pressed = () => {
@@ -111,6 +86,8 @@ class Deck {
                     break;
                 }
             }
+        } else {
+            this.flippDeck.pressedCard(mx, my);
         }
     }
 

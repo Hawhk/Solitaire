@@ -9,3 +9,9 @@ function drawPad(x, y) {
     fill(34,54,60,220);
     rect(x , y, w, h);
 }
+
+function moveCards(arr1, arr2, index, length) {
+    let spl = arr1.splice(index, length);
+    let con = arr2.concat(spl);
+    return con;
+}

@@ -20,7 +20,7 @@ function draw() {
 }
 
 function mouseClicked() { 
-  deck.clicked();
+  deck.flippDeck.clicked();
 }
 
 function mousePressed() {
