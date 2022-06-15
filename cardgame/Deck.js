@@ -17,9 +17,9 @@ class Deck {
         for (let i = 0; i < 7; i++) {
             this.cols.push(new Column(this.cardX * 2 * (i + 1), this.cardY * 3, i, this));
         }
-        this.sorted = [];
+        this.sorts = [];
         for (let i = 0; i < 4; i++) {
-            this.sorted.push(new Sort(this.cardX * 2 * (i + 4), this.cardY, i, this));
+            this.sorts.push(new Sort(this.cardX * 2 * (i + 4), this.cardY, i, this));
         }
     }
 
@@ -56,25 +56,31 @@ class Deck {
         
 
     show = () => {
+        //draws padds
         drawPad(this.flippDeck.deckX, this.flippDeck.y);
         drawPad(this.flippDeck.flippX, this.flippDeck.y);
         this.cols.forEach(col => {
             drawPad(col.x, col.y);
         });
-        this.sorted.forEach(sort => {
+        this.sorts.forEach(sort => {
             drawPad(sort.x, sort.y);
         });
+        //draws cards
         this.flippDeck.show();
-        this.sorted.forEach(sort => {
-            sort.show();
-        });
         this.cols.forEach(col => {
             col.show();
         });
-        this.cols.forEach(col => {
-            col.drawPressedCardStack();
+        this.sorts.forEach(sort => {
+            sort.show();
         });
+        //draws when pressed
         this.flippDeck.drawPressedCard();
+        this.cols.forEach(col => {
+            col.drawPressedCard();
+        });
+        this.sorts.forEach(sort => {
+            sort.drawPressedCard();
+        });
     }
 
     pressed = () => {
@@ -86,8 +92,12 @@ class Deck {
                     break;
                 }
             }
-        } else {
+        } else if (mx < 240) {
             this.flippDeck.pressedCard(mx, my);
+        } else {
+            for (let i = 0; i < this.sorts.length; i++) {
+                this.sorts[i].pressedCard(mx, my);
+            }
         }
     }
 

@@ -54,7 +54,7 @@ class Column {
         return false;
     }
 
-    drawPressedCardStack = () => {
+    drawPressedCard = () => {
         if (this.draging == -1) {
             return;
         } 
@@ -64,21 +64,40 @@ class Column {
                 this.cards[j].show(mouseX, y, true, true);
             }
         } else {
-            for (let j = 0; j < this.deck.cols.length; j++) {
-                if (j === this.number) {
-                    continue;
-                }
-                const col = this.deck.cols[j];
-                let index = col.cards.length -1;
-                if (index < 0) {
-                    index = 0;
-                }
-                let y = col.y + col.spacing * index;
-                if(insideRect(col.x, y, mouseX, mouseY, this.cardWidth/2, this.cardHeight/2)) {
-                    col.cards = moveCards(this.cards, col.cards, this.draging, this.cards.length);
-                    if (this.showed >= 0 && this.showed == this.cards.length - 1) {
-                        this.showed--;
+            let found = false;
+            if (mouseY > 190) {
+
+                for (let j = 0; j < this.deck.cols.length; j++) {
+                    if (j === this.number) {
+                        continue;
                     }
+                    const col = this.deck.cols[j];
+                    let index = col.cards.length -1;
+                    if (index < 0) {
+                        index = 0;
+                    }
+                    let y = col.y + col.spacing * index;
+                    if(insideRect(col.x, y, mouseX, mouseY, this.cardWidth/2, this.cardHeight/2)) {
+                        col.cards = moveCards(this.cards, col.cards, this.draging, this.cards.length);
+                        found = true;
+                        break;
+                    }
+                }
+            } else {
+                for (let i = 0; i <this.deck.sorts.length; i++) {
+                    const sort = this.deck.sorts[i];
+                    if(insideRect(sort.x, sort.y, mouseX, mouseY, sort.cardWidth/2, sort.cardHeight/2)) {
+                        if (this.draging === this.cards.length - 1) {
+                            sort.cards = moveCards(this.cards, sort.cards, this.draging, 1);
+                            found = true;
+                            break;
+                        }
+                    }
+                }
+            }
+            if (found) {
+                if (this.showed >= 0 && this.showed == this.cards.length - 1) {
+                    this.showed--;
                 }
             }
             this.draging = -1;

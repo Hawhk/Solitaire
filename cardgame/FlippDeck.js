@@ -59,19 +59,29 @@ class FlippDeck {
         if (mouseIsPressed) {
             this.flipp[this.flipp.length -1].show(mouseX, mouseY, true, true);
         } else {
-            for (let i = 0; i < this.game.cols.length; i++) {
-                const col = this.game.cols[i];
-                let index = col.cards.length -1;
-                if (index < 0) {
-                    index = 0;
+            if (mouseY > 190) {
+                for (let i = 0; i < this.game.cols.length; i++) {
+                    const col = this.game.cols[i];
+                    let index = col.cards.length -1;
+                    if (index < 0) {
+                        index = 0;
+                    }
+                    let y = col.y + col.spacing * index;
+                    if(insideRect(col.x, y, mouseX, mouseY, this.cardWidth/2, this.cardHeight/2)) {
+                        col.cards = moveCards(this.flipp, col.cards, this.draging, 1);
+                        break;
+                    }
                 }
-                let y = col.y + col.spacing * index;
-                if(insideRect(col.x, y, mouseX, mouseY, this.cardWidth/2, this.cardHeight/2)) {
-                    col.cards = moveCards(this.flipp, col.cards, this.draging, 1);
+            } else {
+                for (let i = 0; i <this.game.sorts.length; i++) {
+                    const sort = this.game.sorts[i];
+                    if(insideRect(sort.x, sort.y, mouseX, mouseY, sort.cardWidth/2, sort.cardHeight/2)) {
+                        sort.cards = moveCards(this.flipp, sort.cards, this.draging, 1);
+                        break;
+                    }
                 }
             }
             this.draging = -1;
         }
-
     }
 }
