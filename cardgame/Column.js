@@ -39,10 +39,10 @@ class Column {
             let pressed = false;
             let y = this.y + this.spacing * i;
             if (i === this.cards.length - 1) {
-                pressed = insideRect(this.x, y, mx, my, this.cardWidth/2, this.cardHeight/2);
+                pressed = insideRect(this.x, y, mx, my, this.cardWidth, this.cardHeight);
             } else {
                 y = y - this.cardWidth/2 - this.spacing/2 + 3;
-                pressed = insideRect(this.x, y, mx, my, this.cardWidth/2, this.spacing/2);
+                pressed = insideRect(this.x, y, mx, my, this.cardWidth, this.spacing);
             }
             if (pressed) {
                 if (i > this.showed) {
@@ -77,7 +77,9 @@ class Column {
                         index = 0;
                     }
                     let y = col.y + col.spacing * index;
-                    if(insideRect(col.x, y, mouseX, mouseY, this.cardWidth/2, this.cardHeight/2)) {
+                    let inside = insideRect(col.x, y, mouseX, mouseY, this.cardWidth, this.cardHeight);
+                    let place = canPlace(col.cards[col.cards.length - 1], this.cards[this.draging], false);
+                    if(inside && place) {
                         col.cards = moveCards(this.cards, col.cards, this.draging, this.cards.length);
                         found = true;
                         break;
@@ -86,7 +88,9 @@ class Column {
             } else {
                 for (let i = 0; i <this.deck.sorts.length; i++) {
                     const sort = this.deck.sorts[i];
-                    if(insideRect(sort.x, sort.y, mouseX, mouseY, sort.cardWidth/2, sort.cardHeight/2)) {
+                    let inside = insideRect(sort.x, sort.y, mouseX, mouseY, sort.cardWidth, sort.cardHeight);
+                    let place = canPlace(sort.cards[sort.cards.length - 1], this.cards[this.draging], true);
+                    if(inside && place) {
                         if (this.draging === this.cards.length - 1) {
                             sort.cards = moveCards(this.cards, sort.cards, this.draging, 1);
                             found = true;

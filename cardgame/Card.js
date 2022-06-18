@@ -44,11 +44,11 @@ class Card {
         }
     }
 
-    show = (x, y, showFace=false, hoverEffect=false, hx=x, hy=y, hw=this.width/2, hh=this.height/2) => {
+    show = (x, y, showFace=false, hoverEffect=false, hx=x, hy=y, hw=this.width, hh=this.height) => {
         this.drawCard(x, y, showFace, this.getHoverState(hx,hy,hw,hh), hoverEffect);
     }
 
-    getHoverState = (x, y, w=this.width/2, h=this.height/2) => {
+    getHoverState = (x, y, w=this.width, h=this.height) => {
         let mx = mouseX;
         let my = mouseY;
         return insideRect(x,y,mx,my,w,h);

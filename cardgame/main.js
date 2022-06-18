@@ -10,13 +10,9 @@ function setup() {
 }
 let i = 0
 function draw() {
-  // put drawing code here
-  // 
   background(100);
   deck.show();
   i++;
-  // if (i == 2)
-    // noLoop();
 }
 
 function mouseClicked() { 

@@ -16,7 +16,7 @@ class Sort extends Column{
     pressedCard = (mx, my) => {
         let pressed = false;
         let index = this.cards.length - 1;
-        pressed = insideRect(this.x, this.y, mx, my, this.cardWidth/2, this.cardHeight/2);
+        pressed = insideRect(this.x, this.y, mx, my, this.cardWidth, this.cardHeight);
 
         if (pressed) {
             this.draging = index;

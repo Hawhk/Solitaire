@@ -21,6 +21,10 @@ class Deck {
         for (let i = 0; i < 4; i++) {
             this.sorts.push(new Sort(this.cardX * 2 * (i + 4), this.cardY, i, this));
         }
+        this.won = false;
+        
+        this.start = new Date().getTime();
+        this.time = 0;
     }
 
     scramble = () => {
@@ -40,47 +44,69 @@ class Deck {
         this.flippDeck.deck = this.cards.splice(0, this.cards.length);
     }
     
-    showAll = () => {
-        // console.log(x,y)
-        this.cards.forEach(card => {
-            if (x + this.cards[0].width/2 > width) {
-                x = this.cards[0].width/2 + spacing;
-                y += spacing * 5;
+    showAllOnWin = () => {
+        let x = this.cardWidth/2 + this.spacing/2;
+        let y = this.cardHeight/2 + this.spacing;
+        this.cards.forEach((card) => {
+            if (x + this.cardWidth/2 > width) {
+                x = this.cardWidth/2 + this.spacing/2;
+                y += this.spacing * 5;
             }
 
-            card.show(x, y)
+            card.show(x, y, true, true);
 
-            x += this.cards[0].width + spacing;
+            x += this.cardWidth + this.spacing;
         });
     }
         
 
     show = () => {
-        //draws padds
-        drawPad(this.flippDeck.deckX, this.flippDeck.y);
-        drawPad(this.flippDeck.flippX, this.flippDeck.y);
-        this.cols.forEach(col => {
-            drawPad(col.x, col.y);
-        });
-        this.sorts.forEach(sort => {
-            drawPad(sort.x, sort.y);
-        });
-        //draws cards
-        this.flippDeck.show();
-        this.cols.forEach(col => {
-            col.show();
-        });
-        this.sorts.forEach(sort => {
-            sort.show();
-        });
-        //draws when pressed
-        this.flippDeck.drawPressedCard();
-        this.cols.forEach(col => {
-            col.drawPressedCard();
-        });
-        this.sorts.forEach(sort => {
-            sort.drawPressedCard();
-        });
+        
+        if (!this.won){
+            this.time = new Date().getTime() - this.start;
+            //draws padds
+            drawPad(this.flippDeck.deckX, this.flippDeck.y);
+            drawPad(this.flippDeck.flippX, this.flippDeck.y);
+            this.cols.forEach(col => {
+                drawPad(col.x, col.y);
+            });
+            this.sorts.forEach(sort => {
+                drawPad(sort.x, sort.y);
+            });
+            //draws cards
+            this.flippDeck.show();
+            this.cols.forEach(col => {
+                col.show();
+            });
+            let done = 0;
+            this.sorts.forEach(sort => {
+                sort.show();
+                if (sort.cards.length === 13) {
+                    done++;
+                }
+            });
+            if (done == 4) {
+                this.won = true;
+                this.sorts.forEach(sort => {
+                    this.cards = this.cards.concat(sort.cards);
+                    console.log(this.cards);
+                    sort.cards = [];
+                });
+                this.scramble();
+            }
+            //draws when pressed
+            this.flippDeck.drawPressedCard();
+            this.cols.forEach(col => {
+                col.drawPressedCard();
+            });
+            this.sorts.forEach(sort => {
+                sort.drawPressedCard();
+            });
+        } else {
+            this.showAllOnWin();
+        }
+        fill(0);
+        text(new Date(this.time).toISOString().slice(11, 19), width/2, height - 50);
     }
 
     pressed = () => {

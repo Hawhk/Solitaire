@@ -27,16 +27,12 @@ class FlippDeck {
     }
 
     clicked = () => {
-        let isClicked = false;
-        if (this.deck.length > 0) {
-            let lastCard = this.deck[this.deck.length - 1];
-            isClicked = lastCard.getHoverState(this.deckX, this.y);
-            // console.log(isPressed, x, y);
-        } else if (this.flipp.length > 0) {
+        let isClicked = insideRect(this.deckX, this.y, mouseX, mouseY, this.cardWidth, this.cardHeight);
+        
+        if (this.deck.length === 0 && isClicked) {
             this.deck = this.flipp.reverse();
             this.flipp = [];
-            isClicked = true;
-        
+            isClicked = false;
         }
         if (isClicked) {
             this.flipp.push(this.deck.pop());
@@ -45,7 +41,7 @@ class FlippDeck {
 
     pressedCard = (mx, my) => {
         if(this.flipp.length > 0) {
-            let pressed = insideRect(this.flippX, this.y, mx, my, this.cardWidth/2, this.cardHeight/2);
+            let pressed = insideRect(this.flippX, this.y, mx, my, this.cardWidth, this.cardHeight);
             if (pressed) {
                 this.draging = this.flipp.length -1;
             }
@@ -67,7 +63,9 @@ class FlippDeck {
                         index = 0;
                     }
                     let y = col.y + col.spacing * index;
-                    if(insideRect(col.x, y, mouseX, mouseY, this.cardWidth/2, this.cardHeight/2)) {
+                    let inside = insideRect(col.x, y, mouseX, mouseY, this.cardWidth, this.cardHeight);
+                    let place = canPlace(col.cards[col.cards.length - 1], this.flipp[this.draging], false);
+                    if(inside && place) {
                         col.cards = moveCards(this.flipp, col.cards, this.draging, 1);
                         break;
                     }
@@ -75,7 +73,9 @@ class FlippDeck {
             } else {
                 for (let i = 0; i <this.game.sorts.length; i++) {
                     const sort = this.game.sorts[i];
-                    if(insideRect(sort.x, sort.y, mouseX, mouseY, sort.cardWidth/2, sort.cardHeight/2)) {
+                    let inside = insideRect(sort.x, sort.y, mouseX, mouseY, sort.cardWidth, sort.cardHeight);
+                    let place = canPlace(sort.cards[sort.cards.length - 1], this.flipp[this.draging], true);
+                    if(inside && place) {
                         sort.cards = moveCards(this.flipp, sort.cards, this.draging, 1);
                         break;
                     }
@@ -84,4 +84,5 @@ class FlippDeck {
             this.draging = -1;
         }
     }
+
 }
