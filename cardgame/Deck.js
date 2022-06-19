@@ -22,6 +22,7 @@ class Deck {
             this.sorts.push(new Sort(this.cardX * 2 * (i + 4), this.cardY, i, this));
         }
         this.won = false;
+        this.canSolve = false;
         
         this.start = new Date().getTime();
         this.time = 0;
@@ -74,26 +75,21 @@ class Deck {
                 drawPad(sort.x, sort.y);
             });
             //draws cards
+            let done = 0;
+            let left = 0;
             this.flippDeck.show();
             this.cols.forEach(col => {
                 col.show();
+                if (!this.canSolve){
+                    left += col.showed;
+                }
             });
-            let done = 0;
             this.sorts.forEach(sort => {
                 sort.show();
                 if (sort.cards.length === 13) {
                     done++;
                 }
             });
-            if (done == 4) {
-                this.won = true;
-                this.sorts.forEach(sort => {
-                    this.cards = this.cards.concat(sort.cards);
-                    console.log(this.cards);
-                    sort.cards = [];
-                });
-                this.scramble();
-            }
             //draws when pressed
             this.flippDeck.drawPressedCard();
             this.cols.forEach(col => {
@@ -102,6 +98,24 @@ class Deck {
             this.sorts.forEach(sort => {
                 sort.drawPressedCard();
             });
+            if (left === -7) {
+                this.canSolve = true;
+                let c = 235;
+                if (insideRect(width/2, height - 100, mouseX, mouseY, 80, 40)) {
+                    c += 20;
+                }
+                fill(c);
+                rect(width/2, height - 100, 80, 40);
+                fill(0);
+                text("Solve!", width/2, height - 100, 80, 40);
+            } else if (done === 4) {
+                this.won = true;
+                this.sorts.forEach(sort => {
+                    this.cards = this.cards.concat(sort.cards);
+                    sort.cards = [];
+                });
+                this.scramble();
+            }
         } else {
             this.showAllOnWin();
         }

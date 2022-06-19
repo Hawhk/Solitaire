@@ -55,11 +55,7 @@ class Card {
     }
 
     drawCard = (x, y, showFace, hovers, hoverEffect) => {
-        // console.log(hovers);
-        rectMode(CENTER);
         stroke(0);
-        textAlign(CENTER, CENTER);
-        
 
         let addOnHover = 0;
         if (hoverEffect && hovers) {
@@ -75,7 +71,6 @@ class Card {
         }
         rect(x, y, this.width, this.height);
         
-        
         if (showFace) {
             fill(this.color);
             textSize(35);
@@ -84,7 +79,6 @@ class Card {
             text(this.display, x-35, y-60);
             text(this.suit, x-35, y-45);
             push();
-            // console.log(width);
             translate(x, y); 
             rotate(180);
             text(this.display, -this.width/2 + 15, -this.width/2 - 10);
