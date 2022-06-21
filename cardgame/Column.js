@@ -1,8 +1,8 @@
 class Column {
-    constructor(x, y, number, deck) {
+    constructor(x, y, number, game) {
         this.x = x;
         this.y = y;
-        this.deck = deck;
+        this.game = game;
         this.cards = [];
         this.number = number;
         this.showed = number -1;
@@ -94,8 +94,8 @@ class Column {
             let found = false;
             if (mouseY > 190) {
 
-                for (let j = 0; j < this.deck.cols.length; j++) {
-                    const col = this.deck.cols[j];
+                for (let j = 0; j < this.game.cols.length; j++) {
+                    const col = this.game.cols[j];
                     let index = col.cards.length -1;
                     if (index < 0) {
                         index = 0;
@@ -125,8 +125,8 @@ class Column {
                     }
                 }
             } else {
-                for (let i = 0; i <this.deck.sorts.length; i++) {
-                    const sort = this.deck.sorts[i];
+                for (let i = 0; i <this.game.sorts.length; i++) {
+                    const sort = this.game.sorts[i];
                     let inside = insideRect(
                         sort.x, 
                         sort.y, 

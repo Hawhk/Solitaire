@@ -1,6 +1,6 @@
 class Sort extends Column{
-    constructor(x, y, number, deck) {
-        super(x, y, number, deck);
+    constructor(x, y, number, game) {
+        super(x, y, number, game);
     }
 
     show = () => {

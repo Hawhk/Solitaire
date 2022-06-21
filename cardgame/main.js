@@ -1,4 +1,4 @@
-let deck;
+let game;
 
 function setup() {
   // put setup code here
@@ -8,23 +8,22 @@ function setup() {
 
   createCanvas(1200, 900);
   
-  deck = new Deck();
-  deck.scramble();
-  deck.setCards();
+  game = new Game();
+  game.scramble();
+  game.setCards();
 }
-let i = 0
+
 function draw() {
   background(25, 110, 25);
-  deck.show();
-  i++;
+  game.show();
 }
 
 function mouseClicked() { 
-  deck.clicked();
+  game.clicked();
   
 }
 
 function mousePressed() {
-  deck.pressed();
+  game.pressed();
   return false;
 }

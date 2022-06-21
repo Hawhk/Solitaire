@@ -1,4 +1,4 @@
-class Deck {
+class Game {
     constructor(cards) {
         this.cardWidth = WIDTH;
         this.cardHeight = HEIGHT;
@@ -16,7 +16,7 @@ class Deck {
         if (!!cards && isArray(cards)) {
             this.cards = cards;
         } else {
-            this.cards = Deck.createCards();
+            this.cards = Game.createCards();
         }
         this.cols = [];
         for (let i = 0; i < 7; i++) {
