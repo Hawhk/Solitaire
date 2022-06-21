@@ -14,7 +14,7 @@ function setup() {
 }
 let i = 0
 function draw() {
-  background(100);
+  background(25, 110, 25);
   deck.show();
   i++;
 }
