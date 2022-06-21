@@ -9,14 +9,26 @@ class Sort extends Column{
             minus += 1;
         }
         if (this.cards.length > minus - 1) {
-            this.cards[this.cards.length - minus].show(this.x,  this.y, true, true);
+            this.cards[this.cards.length - minus].show(
+                this.x, 
+                this.y, 
+                true, 
+                true
+            );
         }
     }
 
     pressedCard = (mx, my) => {
         let pressed = false;
         let index = this.cards.length - 1;
-        pressed = insideRect(this.x, this.y, mx, my, this.cardWidth, this.cardHeight);
+        pressed = insideRect(
+            this.x, 
+            this.y, 
+            mx, 
+            my, 
+            this.cardWidth, 
+            this.cardHeight
+        );
 
         if (pressed) {
             this.draging = index;

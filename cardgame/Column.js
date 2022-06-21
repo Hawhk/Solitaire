@@ -27,7 +27,16 @@ class Column {
                     card.show(this.x, y, show, show);
                 } else {
                     let hy = y - this.cardWidth/2 - this.spacing/2 + 3;
-                    card.show(this.x, y, show, show, this.x, hy, this.cardWidth/2, this.spacing/2);
+                    card.show(
+                        this.x, 
+                        y, 
+                        show, 
+                        show, 
+                        this.x, 
+                        hy, 
+                        this.cardWidth/2, 
+                        this.spacing/2
+                    );
                 }
             }
         };
@@ -39,10 +48,24 @@ class Column {
             let pressed = false;
             let y = this.y + this.spacing * i;
             if (i === this.cards.length - 1) {
-                pressed = insideRect(this.x, y, mx, my, this.cardWidth, this.cardHeight);
+                pressed = insideRect(
+                    this.x,
+                    y,
+                    mx,
+                    my,
+                    this.cardWidth,
+                    this.cardHeight
+                );
             } else {
                 y = y - this.cardWidth/2 - this.spacing/2 + 3;
-                pressed = insideRect(this.x, y, mx, my, this.cardWidth, this.spacing);
+                pressed = insideRect(
+                    this.x,
+                    y,
+                    mx,
+                    my,
+                    this.cardWidth,
+                    this.spacing
+                );
             }
             if (pressed) {
                 if (i > this.showed) {
@@ -60,7 +83,11 @@ class Column {
         } 
         if (mouseIsPressed) {
             for (let j = this.draging; j < this.cards.length; j++) {
-                let y = (mouseY + this.spacing * (j - this.draging)) + this.cardWidth/2 + this.spacing/2 + 3;
+                let y = mouseY + 
+                    this.spacing * 
+                    (j - this.draging) + 
+                    this.cardWidth/2 + 
+                    this.spacing/2 + 3;
                 this.cards[j].show(mouseX, y, true, true);
             }
         } else {
@@ -68,19 +95,31 @@ class Column {
             if (mouseY > 190) {
 
                 for (let j = 0; j < this.deck.cols.length; j++) {
-                    if (j === this.number) {
-                        continue;
-                    }
                     const col = this.deck.cols[j];
                     let index = col.cards.length -1;
                     if (index < 0) {
                         index = 0;
                     }
                     let y = col.y + col.spacing * index;
-                    let inside = insideRect(col.x, y, mouseX, mouseY, this.cardWidth, this.cardHeight);
-                    let place = canPlace(col.cards[col.cards.length - 1], this.cards[this.draging], false);
+                    let inside = insideRect(
+                        col.x, 
+                        y, 
+                        mouseX, 
+                        mouseY, 
+                        this.cardWidth, 
+                        this.cardHeight
+                    );
+                    let place = canPlace(
+                        col.cards[col.cards.length - 1], 
+                        this.cards[this.draging], false
+                    );
                     if(inside && place) {
-                        col.cards = moveCards(this.cards, col.cards, this.draging, this.cards.length);
+                        col.cards = moveCards(
+                            this.cards, 
+                            col.cards, 
+                            this.draging, 
+                            this.cards.length
+                        );
                         found = true;
                         break;
                     }
@@ -88,11 +127,27 @@ class Column {
             } else {
                 for (let i = 0; i <this.deck.sorts.length; i++) {
                     const sort = this.deck.sorts[i];
-                    let inside = insideRect(sort.x, sort.y, mouseX, mouseY, sort.cardWidth, sort.cardHeight);
-                    let place = canPlace(sort.cards[sort.cards.length - 1], this.cards[this.draging], true);
+                    let inside = insideRect(
+                        sort.x, 
+                        sort.y, 
+                        mouseX, 
+                        mouseY, 
+                        sort.cardWidth, 
+                        sort.cardHeight
+                    );
+                    let place = canPlace(
+                        sort.cards[sort.cards.length - 1], 
+                        this.cards[this.draging], 
+                        true
+                    );
                     if(inside && place) {
                         if (this.draging === this.cards.length - 1) {
-                            sort.cards = moveCards(this.cards, sort.cards, this.draging, 1);
+                            sort.cards = moveCards(
+                                this.cards, 
+                                sort.cards, 
+                                this.draging, 
+                                1
+                            );
                             found = true;
                             break;
                         }

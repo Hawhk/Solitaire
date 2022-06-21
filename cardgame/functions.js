@@ -34,3 +34,7 @@ function canPlace(card1, card2, sameColor) {
         return card1.color !== card2.color && card1.rank - 1 === card2.rank;
     }
 }
+
+function swap(arr, index1, index2) {
+    [arr[index1],arr[index2]] = [arr[index2],arr[index1]];
+}
