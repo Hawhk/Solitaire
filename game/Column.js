@@ -82,13 +82,17 @@ class Column {
             return;
         } 
         if (mouseIsPressed) {
-            for (let j = this.draging; j < this.cards.length; j++) {
-                let y = mouseY + 
-                    this.spacing * 
-                    (j - this.draging) + 
-                    this.cardWidth/2 + 
-                    this.spacing/2 + 3;
-                this.cards[j].show(mouseX, y, true, true);
+            if (this.draging === this.cards.length - 1) {
+                this.cards[this.draging].show(mouseX, mouseY, true, true);
+            } else {
+                for (let j = this.draging; j < this.cards.length; j++) {
+                    let y = mouseY + 
+                        this.spacing * 
+                        (j - this.draging) + 
+                        this.cardWidth/2 + 
+                        this.spacing/2 + 3;
+                    this.cards[j].show(mouseX, y, true, true);
+                }
             }
         } else {
             let found = false;
