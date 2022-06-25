@@ -18,7 +18,7 @@ function draw() {
   game.show();
 }
 
-function mouseClicked() { 
+function mouseReleased() { 
   game.clicked();
   
 }
