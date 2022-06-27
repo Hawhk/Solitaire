@@ -6,7 +6,7 @@ function setup() {
   textAlign(CENTER, CENTER);
   rectMode(CENTER);
 
-  createCanvas(1200, 900);
+  createCanvas(windowWidth, windowHeight - 50);
   
   game = new Game();
   game.scramble();
@@ -26,4 +26,8 @@ function mouseReleased() {
 function mousePressed() {
   game.pressed();
   return false;
+}
+
+function windowResized() {
+  resizeCanvas(windowWidth, windowHeight - 50);
 }
