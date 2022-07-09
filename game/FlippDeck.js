@@ -51,7 +51,7 @@ class FlippDeck {
 
     drawPressedCard = () => {
         if (this.draging == -1) {
-            return;
+            return false;
         } 
         if (mouseIsPressed) {
             this.flipp[this.flipp.length -1].show(mouseX, mouseY, true, true);
@@ -84,7 +84,7 @@ class FlippDeck {
                             this.draging, 
                             1
                         );
-                        break;
+                        break;                        
                     }
                 }
             } else {
@@ -116,6 +116,7 @@ class FlippDeck {
             }
             this.draging = -1;
         }
+        return true;
     }
 
     getDeckX = () => {

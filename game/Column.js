@@ -76,11 +76,12 @@ class Column {
 
     drawPressedCard = () => {
         if (this.draging == -1) {
-            return;
+            return false;
         } 
         if (mouseIsPressed) {
             if (this.draging === this.cards.length - 1) {
                 this.cards[this.draging].show(mouseX, mouseY, true, true);
+
             } else {
                 for (let j = this.draging; j < this.cards.length; j++) {
                     let y = mouseY + this.getSpacing() * (j - this.draging) + HEIGHT/2 - this.getSpacing()/2;
@@ -157,6 +158,7 @@ class Column {
             }
             this.draging = -1;
         }
+        return true;
     }
 
     getX = () => {

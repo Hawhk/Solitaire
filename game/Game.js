@@ -116,13 +116,21 @@ class Game {
 
     showPressedCards = () => {
         //todo: make them return status if it has drawn or not to optimize
-        this.flippDeck.drawPressedCard();
-        this.cols.forEach(col => {
-            col.drawPressedCard();
-        });
-        this.sorts.forEach(sort => {
-            sort.drawPressedCard();
-        });
+        if(this.flippDeck.drawPressedCard()) {
+            return;
+        }
+        for (let index = 0; index < this.cols.length; index++) {
+            const col = this.cols[index];
+            if(col.drawPressedCard()) {
+                return;
+            }
+        }
+        for (let index = 0; index < this.sorts.length; index++) {
+            const sort = this.sorts[index];
+            if(sort.drawPressedCard()) {
+                return;
+            }
+        }
     }
 
     solveble = () => {
