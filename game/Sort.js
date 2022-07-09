@@ -1,6 +1,6 @@
 class Sort extends Column{
-    constructor(x, y, number, game) {
-        super(x, y, number, game);
+    constructor(number, game) {
+        super(number, game);
     }
 
     show = () => {
@@ -10,8 +10,8 @@ class Sort extends Column{
         }
         if (this.cards.length > minus - 1) {
             this.cards[this.cards.length - minus].show(
-                this.x, 
-                this.y, 
+                this.getX(), 
+                this.getY(), 
                 true, 
                 true
             );
@@ -22,12 +22,12 @@ class Sort extends Column{
         let pressed = false;
         let index = this.cards.length - 1;
         pressed = insideRect(
-            this.x, 
-            this.y, 
+            this.getX(), 
+            this.getY(), 
             mx, 
             my, 
-            this.cardWidth, 
-            this.cardHeight
+            WIDTH, 
+            HEIGHT
         );
 
         if (pressed) {
@@ -35,5 +35,13 @@ class Sort extends Column{
             return pressed;
         }
         return false;
+    }
+    
+    getX = () => {
+        return this.game.getX() * 6 + (this.number) * (WIDTH + SPACING);
+    }
+
+    getY = () => {
+        return this.game.getY();
     }
 }

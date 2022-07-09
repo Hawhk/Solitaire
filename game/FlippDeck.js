@@ -1,10 +1,5 @@
 class FlippDeck {
-    constructor(deckX, flippX, y, game) {
-        this.cardWidth = WIDTH;
-        this.cardHeight = HEIGHT;
-        this.deckX = deckX;
-        this.flippX = flippX;
-        this.y = y;
+    constructor(game) {
         this.game = game;
         this.deck = [];
         this.flipp = [];
@@ -18,30 +13,22 @@ class FlippDeck {
         if (this.draging != -1) {
             minus += 1;
         }
+        let deckX = this.getDeckX();
+        let flippX = this.getFlippX();
+        let y = this.getY();
         if(deckLen > 0) {
-            this.deck[deckLen - 1].show(this.deckX, this.y, false, true);
+            this.deck[deckLen - 1].show(deckX, y, false, true);
         }
         if(flippLen > minus - 1) {
-            this.flipp[flippLen - minus].show(this.flippX, this.y, true, true);
+            this.flipp[flippLen - minus].show(flippX, y, true, true);
         }
     }
 
-    clicked = () => {
-        let isClicked = insideRect(
-            this.deckX, 
-            this.y, 
-            mouseX, 
-            mouseY, 
-            this.cardWidth, 
-            this.cardHeight
-        );
-        
-        if (this.deck.length === 0 && isClicked) {
+    clicked = () => {        
+        if (this.deck.length === 0) {
             this.deck = this.flipp.reverse();
             this.flipp = [];
-            isClicked = false;
-        }
-        if (isClicked) {
+        } else {
             this.flipp.push(this.deck.pop());
         }
     }
@@ -49,12 +36,12 @@ class FlippDeck {
     pressedCard = (mx, my) => {
         if(this.flipp.length > 0) {
             let pressed = insideRect(
-                this.flippX, 
-                this.y, 
+                this.getFlippX(), 
+                this.getY(), 
                 mx, 
                 my, 
-                this.cardWidth, 
-                this.cardHeight
+                WIDTH, 
+                HEIGHT
             );
             if (pressed) {
                 this.draging = this.flipp.length -1;
@@ -69,21 +56,21 @@ class FlippDeck {
         if (mouseIsPressed) {
             this.flipp[this.flipp.length -1].show(mouseX, mouseY, true, true);
         } else {
-            if (mouseY > 190) {
+            if (mouseY > this.game.cols[0].getY() - HEIGHT/2) {
                 for (let i = 0; i < this.game.cols.length; i++) {
                     const col = this.game.cols[i];
                     let index = col.cards.length -1;
                     if (index < 0) {
                         index = 0;
                     }
-                    let y = col.y + col.spacing * index;
+                    let y = col.getY() + col.getSpacing() * index;
                     let inside = insideRect(
-                        col.x, 
+                        col.getX(), 
                         y, 
                         mouseX, 
                         mouseY, 
-                        this.cardWidth, 
-                        this.cardHeight
+                        WIDTH, 
+                        HEIGHT
                     );
                     let place = canPlace(
                         col.cards[col.cards.length - 1], 
@@ -104,12 +91,12 @@ class FlippDeck {
                 for (let i = 0; i <this.game.sorts.length; i++) {
                     const sort = this.game.sorts[i];
                     let inside = insideRect(
-                        sort.x, 
-                        sort.y, 
+                        sort.getX(), 
+                        sort.getY(), 
                         mouseX, 
                         mouseY, 
-                        sort.cardWidth, 
-                        sort.cardHeight
+                        WIDTH, 
+                        HEIGHT
                     );
                     let place = canPlace(
                         sort.cards[sort.cards.length - 1], 
@@ -131,4 +118,15 @@ class FlippDeck {
         }
     }
 
+    getDeckX = () => {
+        return this.game.getX();
+    }
+
+    getFlippX = () => {
+        return this.game.getX() + WIDTH + SPACING;
+    }
+
+    getY = () => {
+        return this.game.getY();
+    }
 }

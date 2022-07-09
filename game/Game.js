@@ -1,15 +1,6 @@
 class Game {
     constructor(cards) {
-        this.cardWidth = WIDTH;
-        this.cardHeight = HEIGHT;
-        this.spacing = 20;
-        this.cardX = this.cardWidth/2 + this.spacing;
-        this.cardY = this.cardHeight/2 + this.spacing;
-        
         this.flippDeck = new FlippDeck(
-            this.cardX, 
-            this.cardX * 3, 
-            this.cardY, 
             this
         );
 
@@ -21,13 +12,13 @@ class Game {
         this.cols = [];
         for (let i = 0; i < 7; i++) {
             this.cols.push(
-                new Column(this.cardX * 2 * (i + 1), this.cardY * 3, i, this)
+                new Column(i, this)
             );
         }
         this.sorts = [];
         for (let i = 0; i < 4; i++) {
             this.sorts.push(
-                new Sort(this.cardX * 2 * (i + 4), this.cardY, i, this)
+                new Sort(i, this)
             );
         }
         this.won = false;
@@ -55,81 +46,32 @@ class Game {
     }
     
     showAllOnWin = () => {
-        let x = this.cardWidth/2 + this.spacing/2;
-        let y = this.cardHeight/2 + this.spacing;
+        let x = WIDTH/2 + SPACING/2;
+        let y = HEIGHT/2 + SPACING;
         this.cards.forEach((card) => {
-            if (x + this.cardWidth/2 > width) {
-                x = this.cardWidth/2 + this.spacing/2;
-                y += this.spacing * 5;
+            if (x + WIDTH/2 > width) {
+                x = WIDTH/2 + SPACING/2;
+                y += SPACING * 5;
             }
 
             card.show(x, y, true, true);
 
-            x += this.cardWidth + this.spacing;
+            x += WIDTH + SPACING;
         });
     }
 
     show = () => {
-        
         if (!this.won){
             this.time = new Date().getTime() - this.start;
             //draws padds
-            drawPad(this.flippDeck.deckX, this.flippDeck.y);
-            drawPad(this.flippDeck.flippX, this.flippDeck.y);
-            this.cols.forEach(col => {
-                drawPad(col.x, col.y);
-            });
-            this.sorts.forEach(sort => {
-                drawPad(sort.x, sort.y);
-            });
+            this.showPadds();
             //draws cards
-            let done = 0;
-            let left = 0;
-            this.flippDeck.show();
-            this.cols.forEach(col => {
-                col.show();
-                left += col.showed;
-            });
-            this.canSolve = left === -7;
-            this.sorts.forEach(sort => {
-                sort.show();
-                if (sort.cards.length === 13) {
-                    done++;
-                }
-            });
+            this.showCards();
             //draws when pressed
-            this.flippDeck.drawPressedCard();
-            this.cols.forEach(col => {
-                col.drawPressedCard();
-            });
-            this.sorts.forEach(sort => {
-                sort.drawPressedCard();
-            });
-            if (this.canSolve) {
-                let c = 235;
-                if (
-                    insideRect(
-                        width/2, 
-                        height - 100, 
-                        mouseX, 
-                        mouseY, 
-                        80, 
-                        40
-                    )
-                ) {
-                    c += 20;
-                }
-                fill(c);
-                rect(width/2, height - 100, 80, 40);
-                fill(0);
-                text("Solve!", width/2, height - 100, 80, 40);
-            } else if (done === 4) {
-                this.won = true;
-                this.sorts.forEach(sort => {
-                    this.cards = this.cards.concat(sort.cards);
-                    sort.cards = [];
-                });
-                this.scramble();
+            this.showPressedCards();
+            //check if can solve
+            if (this.canSolve || this.won) {
+                this.solveble();
             }
         } else {
             this.showAllOnWin();
@@ -142,16 +84,94 @@ class Game {
         );
     }
 
+    showPadds = () => {
+        let flipDeckY = this.flippDeck.getY();
+        drawPad(this.flippDeck.getDeckX(), flipDeckY);
+        drawPad(this.flippDeck.getFlippX(), flipDeckY);
+        this.cols.forEach(col => {
+            drawPad(col.getX(), col.getY());
+        });
+        this.sorts.forEach(sort => {
+            drawPad(sort.getX(), sort.getY());
+        });
+    }
+
+    showCards = () => {
+        let done = 0;
+        let left = 0;
+        this.flippDeck.show();
+        this.cols.forEach(col => {
+            col.show();
+            left += col.showed;
+        });
+        this.canSolve = left === -7;
+        this.sorts.forEach(sort => {
+            sort.show();
+            if (sort.cards.length === 13) {
+                done++;
+            }
+        });
+        this.won = done === 4;
+    }
+
+    showPressedCards = () => {
+        //todo: make them return status if it has drawn or not to optimize
+        this.flippDeck.drawPressedCard();
+        this.cols.forEach(col => {
+            col.drawPressedCard();
+        });
+        this.sorts.forEach(sort => {
+            sort.drawPressedCard();
+        });
+    }
+
+    solveble = () => {
+        if (this.canSolve) {
+            let c = 235;
+            if (
+                insideRect(
+                    width/2, 
+                    height - 100, 
+                    mouseX, 
+                    mouseY, 
+                    80, 
+                    40
+                )
+            ) {
+                c += 20;
+            }
+            fill(c);
+            rect(width/2, height - 100, 80, 40);
+            fill(0);
+            text("Solve!", width/2, height - 100, 80, 40);
+        } else {
+            this.sorts.forEach(sort => {
+                this.cards = this.cards.concat(sort.cards);
+                sort.cards = [];
+            });
+            this.scramble();
+        }
+    }
+
     pressed = () => {
         let mx = mouseX;
         let my = mouseY;
-        if (my > 190) {
+        if (my > this.cols[0].getY() - HEIGHT/2) {
             for (let i = 0; i < this.cols.length; i++) {
                 if (this.cols[i].pressedCard(mx, my)) {
                     break;
                 }
             }
-        } else if (mx < 240) {
+        } else if (
+            insideRect(
+                this.flippDeck.getFlippX(), 
+                this.flippDeck.getY(), 
+                mx,
+                my,
+                WIDTH,
+                HEIGHT
+            )
+        ) {
             this.flippDeck.pressedCard(mx, my);
         } else {
             for (let i = 0; i < this.sorts.length; i++) {
@@ -163,7 +183,16 @@ class Game {
     clicked = () => {
         let my = mouseY;
         let mx = mouseX;
-        if (mx < 200 && my < 200) {
+        if (
+            insideRect(
+                this.flippDeck.getDeckX(), 
+                this.flippDeck.getY(), 
+                mx,
+                my,
+                WIDTH,
+                HEIGHT
+            )
+        ) {
             this.flippDeck.clicked();
         } else if (
             insideRect(
@@ -193,7 +222,6 @@ class Game {
                     lowestCard = sort.cards[lenInd].rank;
                 }
             });
-            console.log(lowestCard);
             for (let i = lowestCard + 1; i <= 13; i++) {
                 let card
                 let found = false;
@@ -253,7 +281,6 @@ class Game {
                 break;
             }
             let sortCard = this.sorts[j].cards[lenInd];
-            console.log(card, sortCard);
             if(
                 sortCard.rank + 1 === card.rank &&
                 sortCard.suit === card.suit
@@ -262,6 +289,14 @@ class Game {
             }
         }
         return index;
+    }
+
+    getX = () => {
+        return WIDTH/2 + SPACING/2;
+    }
+
+    getY = () => {
+        return HEIGHT/2 + SPACING/2;
     }
 
     static createCards = () => {

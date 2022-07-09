@@ -3,11 +3,11 @@ function insideRect(x, y, x2, y2, w, h) {
 }
 
 function drawPad(x, y) {
-    let w = WIDTH + 15;
-    let h = HEIGHT + 15;
+    let w = WIDTH + HEIGHT/10;
+    let h = HEIGHT + HEIGHT/10;
     noStroke();
     fill(34,54,60,220);
-    rect(x , y, w, h);
+    rect(x, y, w, h);
 }
 
 function moveCards(arr1, arr2, index, length) {
@@ -17,15 +17,15 @@ function moveCards(arr1, arr2, index, length) {
 }
 
 function canPlace(card1, card2, sameColor) {
+    if (!card2) {
+        console.log("errror!!!")
+        return false;
+    }
+
     if (!card1 && sameColor) {
         return card2.rank === 1;
     } else if (!card1) {
         return card2.rank === 13;
-    }
-
-    if (!card2) {
-        console.log("errror!!!")
-        return false;
     }
 
     if (sameColor) {

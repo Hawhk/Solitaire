@@ -1,41 +1,37 @@
 class Column {
-    constructor(x, y, number, game) {
-        this.x = x;
-        this.y = y;
+    constructor(number, game) {
         this.game = game;
         this.cards = [];
         this.number = number;
         this.showed = number -1;
-        this.cardWidth = WIDTH;
-        this.cardHeight = HEIGHT;
-        this.spacing = 30;
-        this.draging = -1;
+        this.draging = -1; 
     }
 
     show = () => {
         for (let index = 0; index < this.cards.length; index++) {
             let card = this.cards[index];
-            let show = index > this.showed; //TODO: remove -6; 
-            let y = this.y + this.spacing * index;
+            let show = index > this.showed; 
+            let y = this.getY() + this.getSpacing() * index;
             if (
                 this.draging != -1 &&
                 index >= this.draging
-                ) {
+            ) {
                 break;
             } else {
                 if (index == this.cards.length - 1) {
-                    card.show(this.x, y, show, show);
+                    card.show(this.getX(), y, show, show);
                 } else {
-                    let hy = y - this.cardWidth/2 - this.spacing/2 + 3;
+                    // todo: fix when hovering
+                    let hy = y - WIDTH/2 - this.getSpacing() + 3;
                     card.show(
-                        this.x, 
+                        this.getX(), 
                         y, 
                         show, 
                         show, 
-                        this.x, 
+                        this.getX(), 
                         hy, 
-                        this.cardWidth/2, 
-                        this.spacing/2
+                        WIDTH, 
+                        this.getSpacing()
                     );
                 }
             }
@@ -46,25 +42,26 @@ class Column {
         for (let i = 0; i < this.cards.length; i++) {
             // const card = this.cards[i];
             let pressed = false;
-            let y = this.y + this.spacing * i;
+            let y = this.getY() + this.getSpacing() * i;
             if (i === this.cards.length - 1) {
+                
                 pressed = insideRect(
-                    this.x,
+                    this.getX(),
                     y,
                     mx,
                     my,
-                    this.cardWidth,
-                    this.cardHeight
+                    WIDTH,
+                    HEIGHT
                 );
             } else {
-                y = y - this.cardWidth/2 - this.spacing/2 + 3;
+                y = y - WIDTH/2 - this.getSpacing() + 3;
                 pressed = insideRect(
-                    this.x,
+                    this.getX(),
                     y,
                     mx,
                     my,
-                    this.cardWidth,
-                    this.spacing
+                    WIDTH,
+                    SPACING
                 );
             }
             if (pressed) {
@@ -86,32 +83,29 @@ class Column {
                 this.cards[this.draging].show(mouseX, mouseY, true, true);
             } else {
                 for (let j = this.draging; j < this.cards.length; j++) {
-                    let y = mouseY + 
-                        this.spacing * 
-                        (j - this.draging) + 
-                        this.cardWidth/2 + 
-                        this.spacing/2 + 3;
+                    // todo: fix so that the dragplace is correct
+                    // let y = mouseY + this.getSpacing() * (j - this.draging) + this.cardWidth/2 + this.getSpacing()/2 + 3;
+                    let y = mouseY + this.getSpacing() * (j - this.draging) + HEIGHT/2 - this.getSpacing()/2;
                     this.cards[j].show(mouseX, y, true, true);
                 }
             }
         } else {
             let found = false;
-            if (mouseY > 190) {
-
+            if (mouseY > this.getY() - HEIGHT/2) {
                 for (let j = 0; j < this.game.cols.length; j++) {
                     const col = this.game.cols[j];
                     let index = col.cards.length -1;
                     if (index < 0) {
                         index = 0;
                     }
-                    let y = col.y + col.spacing * index;
+                    let y = col.getY() + this.getSpacing() * index;
                     let inside = insideRect(
-                        col.x, 
+                        col.getX(), 
                         y, 
                         mouseX, 
                         mouseY, 
-                        this.cardWidth, 
-                        this.cardHeight
+                        WIDTH, 
+                        HEIGHT
                     );
                     let place = canPlace(
                         col.cards[col.cards.length - 1], 
@@ -132,12 +126,12 @@ class Column {
                 for (let i = 0; i <this.game.sorts.length; i++) {
                     const sort = this.game.sorts[i];
                     let inside = insideRect(
-                        sort.x, 
-                        sort.y, 
+                        sort.getX(), 
+                        sort.getY(), 
                         mouseX, 
                         mouseY, 
-                        sort.cardWidth, 
-                        sort.cardHeight
+                        WIDTH, 
+                        HEIGHT
                     );
                     let place = canPlace(
                         sort.cards[sort.cards.length - 1], 
@@ -165,5 +159,17 @@ class Column {
             }
             this.draging = -1;
         }
+    }
+
+    getX = () => {
+        return this.game.getX() + this.number * (WIDTH + SPACING);
+    }
+
+    getY = () => {
+        return this.game.getY() + HEIGHT + SPACING;
+    }
+
+    getSpacing = () => {
+        return SPACING/2;
     }
 }

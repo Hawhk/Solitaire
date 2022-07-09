@@ -1,10 +1,8 @@
-const WIDTH = 100;
-const HEIGHT = 150;
+// const WIDTH = width/7;
+// const HEIGHT = 150;
 
 class Card {
     constructor(rank, suit) {
-        this.width = WIDTH;
-        this.height = HEIGHT;
         this.rank = rank;
         this.suit = suit;
         this.frontColor = 235;
@@ -44,11 +42,11 @@ class Card {
         }
     }
 
-    show = (x, y, showFace=false, hoverEffect=false, hx=x, hy=y, hw=this.width, hh=this.height) => {
+    show = (x, y, showFace=false, hoverEffect=false, hx=x, hy=y, hw=WIDTH, hh=HEIGHT) => {
         this.drawCard(x, y, showFace, this.getHoverState(hx,hy,hw,hh), hoverEffect);
     }
 
-    getHoverState = (x, y, w=this.width, h=this.height) => {
+    getHoverState = (x, y, w=WIDTH, h=HEIGHT) => {
         let mx = mouseX;
         let my = mouseY;
         return insideRect(x,y,mx,my,w,h);
@@ -69,20 +67,23 @@ class Card {
             backColorAddon[2] += addOnHover * 3;
             fill(backColorAddon);
         }
-        rect(x, y, this.width, this.height);
+        rect(x, y, WIDTH, HEIGHT);
         
         if (showFace) {
             fill(this.color);
-            textSize(35);
+            textSize(SPACING/2);
             text(this.suit, x, y);
-            textSize(20);
-            text(this.display, x-35, y-60);
-            text(this.suit, x-35, y-45);
+            textSize(SPACING/3);
+
             push();
             translate(x, y); 
+            let tx = -WIDTH/2 + WIDTH/7;
+            let ty = -HEIGHT/2 + HEIGHT/8;
+            text(this.display, tx, ty);
+            text(this.suit, -tx , ty);
             rotate(180);
-            text(this.display, -this.width/2 + 15, -this.width/2 - 10);
-            text(this.suit, -this.width/2 + 15, -this.width/2 + 5);
+            text(this.display, tx , ty);
+            text(this.suit, -tx, ty);
             pop(); 
         }
     }
