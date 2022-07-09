@@ -22,7 +22,7 @@ class Column {
                     card.show(this.getX(), y, show, show);
                 } else {
                     // todo: fix when hovering
-                    let hy = y - WIDTH/2 - this.getSpacing() + 3;
+                    let hy = y - HEIGHT/2 + this.getSpacing()/2;
                     card.show(
                         this.getX(), 
                         y, 

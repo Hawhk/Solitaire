@@ -1,3 +1,4 @@
+const FPS = 120;
 let WIDTH;
 let HEIGHT;
 let SPACING;
@@ -9,7 +10,8 @@ const CARDS_PER_WIDTH = 15;
 
 function setup() {
   // put setup code here
-  createCanvas(windowWidth, windowHeight - 50);
+  createCanvas(windowWidth, windowHeight - 25);
+  frameRate(FPS);
   SPACING = width * SPACING_PERCENT;
   WIDTH = width/CARDS_PER_WIDTH;
   HEIGHT = WIDTH * RATIO;
@@ -40,7 +42,7 @@ function mousePressed() {
 }
 
 function windowResized() {
-  resizeCanvas(windowWidth, windowHeight - 50);
+  resizeCanvas(windowWidth, windowHeight - 25);
   SPACING = width * SPACING_PERCENT;
   WIDTH = width/CARDS_PER_WIDTH;
   HEIGHT = WIDTH * RATIO;

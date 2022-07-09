@@ -80,7 +80,7 @@ class Game {
         text(
             new Date(this.time).toISOString().slice(11, 19), 
             width/2,
-            height - 50
+            height - SPACING/2
         );
     }
 
@@ -115,7 +115,6 @@ class Game {
     }
 
     showPressedCards = () => {
-        //todo: make them return status if it has drawn or not to optimize
         if(this.flippDeck.drawPressedCard()) {
             return;
         }
