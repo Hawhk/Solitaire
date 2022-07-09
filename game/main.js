@@ -4,9 +4,9 @@ let HEIGHT;
 let SPACING;
 let game;
 
-const RATIO = 1.5;
-const SPACING_PERCENT = 0.04;
-const CARDS_PER_WIDTH = 15;
+const RATIO = 1.4;
+const SPACING_PERCENT = 0.05;
+const CARDS_PER_WIDTH = 14;
 
 function setup() {
   // put setup code here

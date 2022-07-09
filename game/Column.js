@@ -166,7 +166,7 @@ class Column {
     }
 
     getY = () => {
-        return this.game.getY() + HEIGHT + SPACING;
+        return this.game.getY() + HEIGHT + this.getSpacing();
     }
 
     getSpacing = () => {
