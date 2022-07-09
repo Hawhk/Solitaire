@@ -83,8 +83,6 @@ class Column {
                 this.cards[this.draging].show(mouseX, mouseY, true, true);
             } else {
                 for (let j = this.draging; j < this.cards.length; j++) {
-                    // todo: fix so that the dragplace is correct
-                    // let y = mouseY + this.getSpacing() * (j - this.draging) + this.cardWidth/2 + this.getSpacing()/2 + 3;
                     let y = mouseY + this.getSpacing() * (j - this.draging) + HEIGHT/2 - this.getSpacing()/2;
                     this.cards[j].show(mouseX, y, true, true);
                 }
