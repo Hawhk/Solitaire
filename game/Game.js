@@ -104,7 +104,7 @@ class Game {
             col.show();
             left += col.showed;
         });
-        this.canSolve = left === -7;
+        this.canSolve = left !== -7;
         this.sorts.forEach(sort => {
             sort.show();
             if (sort.cards.length === 13) {
@@ -133,24 +133,24 @@ class Game {
     }
 
     solveble = () => {
-        if (this.canSolve) {
+        if (this.canSolve && !this.won) {
             let c = 235;
             if (
                 insideRect(
-                    width/2, 
-                    height - 100, 
-                    mouseX, 
-                    mouseY, 
-                    80, 
-                    40
+                    width/2,
+                    height - SPACING * 1.02, 
+                    mouseX,
+                    mouseY,
+                    SPACING * 1.1,
+                    SPACING/2
                 )
             ) {
                 c += 20;
             }
             fill(c);
-            rect(width/2, height - 100, 80, 40);
+            rect(width/2, height - SPACING - SPACING/50, SPACING + SPACING/10, SPACING/2);
             fill(0);
-            text("Solve!", width/2, height - 100, 80, 40);
+            text("Solve!", width/2, height - SPACING);
         } else {
             this.sorts.forEach(sort => {
                 this.cards = this.cards.concat(sort.cards);
@@ -204,11 +204,11 @@ class Game {
         } else if (
             insideRect(
                 width/2,
-                height - 100, 
+                height - SPACING * 1.02, 
                 mx,
                 my,
-                80,
-                40
+                SPACING * 1.1,
+                SPACING/2
             )
         ) {
             this.solve();
@@ -273,7 +273,6 @@ class Game {
                     }
                 }
             }
-            this.won = true;
         }
     }
 

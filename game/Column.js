@@ -54,7 +54,7 @@ class Column {
                     HEIGHT
                 );
             } else {
-                y = y - WIDTH/2 - this.getSpacing() + 3;
+                y = y - HEIGHT/2;
                 pressed = insideRect(
                     this.getX(),
                     y,
