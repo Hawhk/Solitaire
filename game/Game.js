@@ -46,17 +46,22 @@ class Game {
     }
     
     showAllOnWin = () => {
-        let x = WIDTH/2 + SPACING/2;
-        let y = HEIGHT/2 + SPACING;
+        const START_X = WIDTH/2 + SPACING/7;
+        const SPACING_X = WIDTH + SPACING/2;
+        const SPACING_Y = HEIGHT + SPACING/3;
+
+        let x = START_X;
+        let y = SPACING_Y - HEIGHT/2;
         this.cards.forEach((card) => {
             if (x + WIDTH/2 > width) {
-                x = WIDTH/2 + SPACING/2;
-                y += SPACING * 5;
+                x = START_X;
+                y += SPACING_Y;
             }
-
+            WIDTH = width/(CARDS_PER_WIDTH + 5);
+            HEIGHT = WIDTH*RATIO;
             card.show(x, y, true, true);
 
-            x += WIDTH + SPACING;
+            x += SPACING_X;
         });
     }
 
@@ -70,10 +75,18 @@ class Game {
             //draws when pressed
             this.showPressedCards();
             //check if can solve
-            if (this.canSolve || this.won) {
+            if (this.canSolve && !this.won) {
                 this.solveble();
+            } else if (this.won) {
+                this.cards = [];
+                this.sorts.forEach(sort => {
+                    this.cards = this.cards.concat(sort.cards);
+                    sort.cards = [];
+                });
+                this.scramble();
             }
-        } else {
+        }
+        if (this.won) {
             this.showAllOnWin();
         }
         fill(0);
@@ -102,9 +115,9 @@ class Game {
         this.flippDeck.show();
         this.cols.forEach(col => {
             col.show();
-            left += col.showed;
+            left += col.notShowed;
         });
-        this.canSolve = left !== -7;
+        this.canSolve = left === -7;
         this.sorts.forEach(sort => {
             sort.show();
             if (sort.cards.length === 13) {
@@ -133,31 +146,23 @@ class Game {
     }
 
     solveble = () => {
-        if (this.canSolve && !this.won) {
-            let c = 235;
-            if (
-                insideRect(
-                    width/2,
-                    height - SPACING * 1.02, 
-                    mouseX,
-                    mouseY,
-                    SPACING * 1.1,
-                    SPACING/2
-                )
-            ) {
-                c += 20;
-            }
-            fill(c);
-            rect(width/2, height - SPACING - SPACING/50, SPACING + SPACING/10, SPACING/2);
-            fill(0);
-            text("Solve!", width/2, height - SPACING);
-        } else {
-            this.sorts.forEach(sort => {
-                this.cards = this.cards.concat(sort.cards);
-                sort.cards = [];
-            });
-            this.scramble();
+        let c = 235;
+        if (
+            insideRect(
+                width/2,
+                height - SPACING * 1.02, 
+                mouseX,
+                mouseY,
+                SPACING * 1.1,
+                SPACING/2
+            )
+        ) {
+            c += 20;
         }
+        fill(c);
+        rect(width/2, height - SPACING - SPACING/50, SPACING + SPACING/10, SPACING/2);
+        fill(0);
+        text("Solve!", width/2, height - SPACING);
     }
 
     pressed = () => {

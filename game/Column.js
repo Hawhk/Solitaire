@@ -3,14 +3,14 @@ class Column {
         this.game = game;
         this.cards = [];
         this.number = number;
-        this.showed = number -1;
+        this.notShowed = number -1;
         this.draging = -1; 
     }
 
     show = () => {
         for (let index = 0; index < this.cards.length; index++) {
             let card = this.cards[index];
-            let show = index > this.showed; 
+            let show = index > this.notShowed; 
             let y = this.getY() + this.getSpacing() * index;
             if (
                 this.draging != -1 &&
@@ -65,7 +65,7 @@ class Column {
                 );
             }
             if (pressed) {
-                if (i > this.showed) {
+                if (i > this.notShowed) {
                     this.draging = i;
                 }
                 return pressed;
@@ -152,8 +152,8 @@ class Column {
                 }
             }
             if (found) {
-                if (this.showed >= 0 && this.showed == this.cards.length - 1) {
-                    this.showed--;
+                if (this.notShowed >= 0 && this.notShowed == this.cards.length - 1) {
+                    this.notShowed--;
                 }
             }
             this.draging = -1;
