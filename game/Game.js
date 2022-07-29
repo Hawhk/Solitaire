@@ -58,7 +58,7 @@ class Game {
                 y += SPACING_Y;
             }
             WIDTH = width/(CARDS_PER_WIDTH + 5);
-            HEIGHT = WIDTH*RATIO;
+            HEIGHT = WIDTH*CARD_RATIO;
             card.show(x, y, true, true);
 
             x += SPACING_X;
